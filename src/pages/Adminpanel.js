@@ -9,9 +9,13 @@ const AdminPanel = () => {
             <AdminCard title="Edit Page" imageSrc="/images/editpage.png" link="/editpage" />
             <AdminCard title="Adding new Data" imageSrc="/images/adminpage.png" link="/admin" />
             <AdminCard title="Placement" imageSrc="/images/placement.png" link="/placement" />
-        </div>
+            <AdminCard title="HTML Quiz" imageSrc="/images/placement.png" link="/upload-html-quiz"/>
+            <AdminCard title="Placement" imageSrc="/images/placement.png" link="/placement/assistant"/>
+            <AdminCard title="Hackathon" imageSrc="/images/placement.png" link="/Hackathon/assistant"/>
+        </div> 
     );
 };
+
 
 const AdminCard = ({ title, imageSrc, link }) => {
     return (

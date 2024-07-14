@@ -1,9 +1,14 @@
+// Modify HomePage.js to handle subcategory click and navigate to SubcategoryPage
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"
-const HomePage = () => {
+import { useNavigate } from "react-router-dom";
+import SubcategoryPage from "./SubcategoryPage";
+
+const Allcontent = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -24,9 +29,12 @@ const HomePage = () => {
 
     fetchCategories();
   }, []);
+
   const handleSubcategoryClick = (subcategoryId) => {
-    navigate(`/subcategory/${subcategoryId}`);
+    navigate(`/SubcategoryPage/${subcategoryId}`);
   };
+  
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-8 text-center">Home Page</h1>
@@ -40,7 +48,8 @@ const HomePage = () => {
                   {category.subcategories.map((subcategory) => (
                     <li
                       key={subcategory._id}
-                      className="px-4 py-2 hover:bg-gray-100 transition-colors duration-200"
+                      className="px-4 py-2 hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+                      onClick={() => handleSubcategoryClick(subcategory._id)}
                     >
                       {subcategory.name}
                     </li>
@@ -55,4 +64,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Allcontent;

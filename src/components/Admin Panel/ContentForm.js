@@ -1,28 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import QuizForm from './QuizForm';
-import NotesForm from './NotesForm';
-import HTMLQuizForm from './HTMLQuizForm';
-import HTMLNotesForm from './HTMLNotesForm';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import QuizForm from "./QuizForm";
+import NotesForm from "./NotesForm";
+import HTMLQuizForm from "./HTMLQuizForm";
+import HTMLNotesForm from "./HTMLNotesForm";
+import HTMLQuizJsonForm from './HTMLQuizJsonForm.js';
 
 const ContentForm = ({ categories }) => {
-  const [categoryId, setCategoryId] = useState('');
-  const [subcategoryId, setSubcategoryId] = useState('');
-  const [subSubCategoryId, setSubSubCategoryId] = useState('');
-  const [type, setType] = useState('');
+  const [categoryId, setCategoryId] = useState("");
+  const [subcategoryId, setSubcategoryId] = useState("");
+  const [subSubCategoryId, setSubSubCategoryId] = useState("");
+  const [type, setType] = useState("");
   const [subcategories, setSubcategories] = useState([]);
   const [subSubCategories, setSubSubCategories] = useState([]);
-  const [notesTitle, setNotesTitle] = useState('');
+  const [notesTitle, setNotesTitle] = useState("");
   const [showHtmlWarning, setShowHtmlWarning] = useState(false);
 
   useEffect(() => {
     const fetchSubcategories = async () => {
       if (categoryId) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/subcategory?categoryId=${categoryId}`);
+          const response = await axios.get(
+            `http://localhost:5000/api/subcategory?categoryId=${categoryId}`
+          );
           setSubcategories(response.data);
         } catch (error) {
-          console.error('Error fetching subcategories:', error);
+          console.error("Error fetching subcategories:", error);
         }
       }
     };
@@ -34,10 +37,12 @@ const ContentForm = ({ categories }) => {
     const fetchSubSubCategories = async () => {
       if (subcategoryId) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/subsubcategory?subcategoryId=${subcategoryId}`);
+          const response = await axios.get(
+            `http://localhost:5000/api/subsubcategory?subcategoryId=${subcategoryId}`
+          );
           setSubSubCategories(response.data);
         } catch (error) {
-          console.error('Error fetching sub-subcategories:', error);
+          console.error("Error fetching sub-subcategories:", error);
         }
       }
     };
@@ -47,19 +52,27 @@ const ContentForm = ({ categories }) => {
 
   const handleSubcategoryChange = (e) => {
     setSubcategoryId(e.target.value);
-    setSubSubCategoryId('');
+    setSubSubCategoryId("");
   };
 
   const handleTypeChange = (e) => {
     setType(e.target.value);
-    setShowHtmlWarning(e.target.value === 'htmlQuiz' || e.target.value === 'htmlNotes');
+    setShowHtmlWarning(
+      e.target.value === "htmlQuiz" || e.target.value === "htmlNotes"
+    );
   };
 
   const renderForm = () => {
     switch (type) {
-      case 'quiz':
-        return <QuizForm categoryId={categoryId} subcategoryId={subcategoryId} subSubCategoryId={subSubCategoryId} />;
-      case 'notes':
+      case "quiz":
+        return (
+          <QuizForm
+            categoryId={categoryId}
+            subcategoryId={subcategoryId}
+            subSubCategoryId={subSubCategoryId}
+          />
+        );
+      case "notes":
         return (
           <>
             <label className="block mb-2">Notes Title:</label>
@@ -77,56 +90,7 @@ const ContentForm = ({ categories }) => {
             />
           </>
         );
-      // case 'htmlQuiz':
-      //   return (
-      //     <>
-      //       {showHtmlWarning && (
-      //         <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
-      //           <p className="font-bold">HTML Quiz Guidelines:</p>
-      //           <ul className="list-disc pl-5">
-      //             <li>Use &lt;math&gt; tags for mathematical formulas: <code>&lt;math&gt;x^2 + y^2 = z^2&lt;/math&gt;</code></li>
-      //             <li>Use &lt;h1&gt; for the main title: <code>&lt;h1&gt;Quiz Title&lt;/h1&gt;</code></li>
-      //             <li>Structure options as an unordered list: <code>&lt;ul&gt;&lt;li&gt;Option 1&lt;/li&gt;&lt;/ul&gt;</code></li>
-      //             <li>Link images using relative paths: <code>&lt;img src="/images/example.jpg" alt="Description"&gt;</code></li>
-      //           </ul>
-      //         </div>
-      //       )}
-      //       <HTMLQuizForm categoryId={categoryId} subcategoryId={subcategoryId} subSubCategoryId={subSubCategoryId} />
-      //     </>
-      //   );
-      // case 'htmlNotes':
-      //   return (
-      //     <>
-      //       {showHtmlWarning && (
-      //         <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
-      //           <p className="font-bold">HTML Notes Guidelines:</p>
-      //           <ul className="list-disc pl-5">
-      //             <li>Use semantic HTML tags for structure: &lt;header&gt;, &lt;main&gt;, &lt;section&gt;, &lt;article&gt;</li>
-      //             <li>Use &lt;h1&gt; to &lt;h6&gt; for headings in hierarchical order</li>
-      //             <li>Use &lt;p&gt; tags for paragraphs</li>
-      //             <li>Use &lt;code&gt; tags for inline code snippets</li>
-      //             <li>Use &lt;pre&gt;&lt;code&gt; for code blocks</li>
-      //             <li>Use &lt;ul&gt; or &lt;ol&gt; for lists</li>
-      //             <li>Link images using relative paths: <code>&lt;img src="/images/example.jpg" alt="Description"&gt;</code></li>
-      //           </ul>
-      //         </div>
-      //       )}
-      //       <label className="block mb-2">HTML Notes Title:</label>
-      //       <input
-      //         type="text"
-      //         value={notesTitle}
-      //         onChange={(e) => setNotesTitle(e.target.value)}
-      //         className="border p-2 mb-4 w-full"
-      //       />
-      //       <HTMLNotesForm
-      //         categoryId={categoryId}
-      //         subcategoryId={subcategoryId}
-      //         subSubCategoryId={subSubCategoryId}
-      //         title={notesTitle}
-      //       />
-      //     </>
-      //   );
-      case 'htmlQuiz':
+      case "htmlQuiz":
         return (
           <>
             {showHtmlWarning && (
@@ -134,7 +98,7 @@ const ContentForm = ({ categories }) => {
                 <p className="font-bold">HTML Quiz Guidelines:</p>
                 <p>Here's an example of how to structure an HTML quiz:</p>
                 <pre className="bg-gray-100 p-2 mt-2 mb-2 overflow-x-auto">
-{`<h1>Advanced Web Development Quiz</h1>
+                  {`<h1>Advanced Web Development Quiz</h1>
 
 <p>Test your knowledge of web development concepts.</p>
 
@@ -191,15 +155,27 @@ const memoize = (fn) => {
                   <li>Use &lt;h2&gt; for each question</li>
                   <li>Use &lt;pre&gt;&lt;code&gt; for code snippets</li>
                   <li>Use &lt;ul&gt; and &lt;li&gt; for answer options</li>
-                  <li>For math formulas, use &lt;math&gt; tags: <code>&lt;math&gt;x^2 + y^2 = z^2&lt;/math&gt;</code></li>
-                  <li>For images: <code>&lt;img src="/images/example.jpg" alt="Description"&gt;</code></li>
+                  <li>
+                    For math formulas, use &lt;math&gt; tags:{" "}
+                    <code>&lt;math&gt;x^2 + y^2 = z^2&lt;/math&gt;</code>
+                  </li>
+                  <li>
+                    For images:{" "}
+                    <code>
+                      &lt;img src="/images/example.jpg" alt="Description"&gt;
+                    </code>
+                  </li>
                 </ul>
               </div>
             )}
-            <HTMLQuizForm categoryId={categoryId} subcategoryId={subcategoryId} subSubCategoryId={subSubCategoryId} />
+            <HTMLQuizForm
+              categoryId={categoryId}
+              subcategoryId={subcategoryId}
+              subSubCategoryId={subSubCategoryId}
+            />
           </>
         );
-      case 'htmlNotes':
+      case "htmlNotes":
         return (
           <>
             {showHtmlWarning && (
@@ -207,7 +183,7 @@ const memoize = (fn) => {
                 <p className="font-bold">HTML Notes Guidelines:</p>
                 <p>Here's an example of how to structure HTML notes:</p>
                 <pre className="bg-gray-100 p-2 mt-2 mb-2 overflow-x-auto">
-{`<h1>Introduction to Web Development</h1>
+                  {`<h1>Introduction to Web Development</h1>
 
 <p>Web development is the process of creating websites and web applications.</p>
 
@@ -273,14 +249,24 @@ greet('Web Developer');
                 </pre>
                 <p>Key points:</p>
                 <ul className="list-disc pl-5">
-                  <li>Use semantic HTML tags: &lt;header&gt;, &lt;main&gt;, &lt;section&gt;, &lt;article&gt;</li>
-                  <li>Use &lt;h1&gt; to &lt;h6&gt; for headings in hierarchical order</li>
+                  <li>
+                    Use semantic HTML tags: &lt;header&gt;, &lt;main&gt;,
+                    &lt;section&gt;, &lt;article&gt;
+                  </li>
+                  <li>
+                    Use &lt;h1&gt; to &lt;h6&gt; for headings in hierarchical
+                    order
+                  </li>
                   <li>Use &lt;p&gt; tags for paragraphs</li>
                   <li>Use &lt;pre&gt;&lt;code&gt; for code blocks</li>
                   <li>Use &lt;img&gt; for images with relative paths</li>
                   <li>Use &lt;video&gt; for embedding videos</li>
-                  <li>Use &lt;math&gt; tags for complex mathematical formulas</li>
-                  <li>Use &lt;hr/&gt; for horizontal rules to separate sections</li>
+                  <li>
+                    Use &lt;math&gt; tags for complex mathematical formulas
+                  </li>
+                  <li>
+                    Use &lt;hr/&gt; for horizontal rules to separate sections
+                  </li>
                 </ul>
               </div>
             )}
@@ -299,13 +285,26 @@ greet('Web Developer');
             />
           </>
         );
-      case 'json':
+      case "json":
         return (
           <form onSubmit={handleJsonSubmit}>
             <label className="block mb-2">Upload JSON File:</label>
             <input type="file" onChange={handleJsonChange} className="mb-4" />
-            <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors">Upload JSON</button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
+            >
+              Upload JSON
+            </button>
           </form>
+        );
+      case "htmlQuizJson":
+        return (
+          <HTMLQuizJsonForm
+            categoryId={categoryId}
+            subcategoryId={subcategoryId}
+            subSubCategoryId={subSubCategoryId}
+          />
         );
       default:
         return null;
@@ -323,10 +322,14 @@ greet('Web Developer');
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800">Add Content</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800">
+        Add Content
+      </h2>
       <form className="mb-6">
         <div className="mb-4">
-          <label className="block mb-2 font-medium text-gray-700">Select Category:</label>
+          <label className="block mb-2 font-medium text-gray-700">
+            Select Category:
+          </label>
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
@@ -341,7 +344,9 @@ greet('Web Developer');
           </select>
         </div>
         <div className="mb-4">
-          <label className="block mb-2 font-medium text-gray-700">Select Subcategory:</label>
+          <label className="block mb-2 font-medium text-gray-700">
+            Select Subcategory:
+          </label>
           <select
             value={subcategoryId}
             onChange={handleSubcategoryChange}
@@ -356,7 +361,9 @@ greet('Web Developer');
           </select>
         </div>
         <div className="mb-4">
-          <label className="block mb-2 font-medium text-gray-700">Select Sub-Subcategory:</label>
+          <label className="block mb-2 font-medium text-gray-700">
+            Select Sub-Subcategory:
+          </label>
           <select
             value={subSubCategoryId}
             onChange={(e) => setSubSubCategoryId(e.target.value)}
@@ -371,7 +378,9 @@ greet('Web Developer');
           </select>
         </div>
         <div className="mb-4">
-          <label className="block mb-2 font-medium text-gray-700">Select Content Type:</label>
+          <label className="block mb-2 font-medium text-gray-700">
+            Select Content Type:
+          </label>
           <select
             value={type}
             onChange={handleTypeChange}
@@ -382,6 +391,7 @@ greet('Web Developer');
             <option value="notes">Notes</option>
             <option value="htmlQuiz">HTML Quiz</option>
             <option value="htmlNotes">HTML Notes</option>
+            <option value="htmlQuizJson">HTML Quiz JSON Upload</option>
             <option value="json">JSON</option>
           </select>
         </div>
